@@ -870,8 +870,17 @@ button:focus {
   -ms-flex-direction: column;
   flex-direction: column;
   row-gap: 10px;
+  position: relative;
 }
-
+.page-callback__form-err {
+  color: crimson;
+  font-size: 12px;
+  line-height: 14px;
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  right: 0;
+}
 .page-callback__form-field label {
   font-family: var(--font-family-roboto);
   font-size: 14px;

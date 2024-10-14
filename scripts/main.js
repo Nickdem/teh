@@ -74,7 +74,7 @@ $(document).ready(function () {
 
   const errorsMsgs = {
     name: {
-      empty: "Вы не заполнили поле имя",
+      empty: "Поле слишком короткое",
     },
     tel: {
       empty: "Вы не заполнили поле телефон",
@@ -100,32 +100,43 @@ $(document).ready(function () {
     let errorMessage = "";
     const formInputs = formEl.querySelectorAll("input");
 
-    console.log(formInputs);
-
-    formInputs.forEach(function (formInput) {
+      formInputs.forEach(function (formInput) {
       const formInputValue = formInput.value.trim();
       switch (formInput.getAttribute("type")) {
         case "text":
           if (formInputValue == "" || formInputValue.length < 2) {
             errorMessage += errorsMsgs.name.empty + "\r\n";
+            formInput.parentNode.insertAdjacentHTML(
+              "beforeend",
+              `<span class="page-callback__form-err">${errorsMsgs.name.empty}</span>`
+            );
             isValid = false;
           }
           break;
         case "tel":
           if (formInputValue == "" || formInputValue.length < 18) {
             errorMessage += errorsMsgs.tel.empty + "\r\n";
+            formInput.parentNode.insertAdjacentHTML(
+              "beforeend",
+              `<span class="page-callback__form-err">${errorsMsgs.tel.empty}</span>`
+            );
             isValid = false;
           }
           break;
         case "email":
           if (formInputValue == "" || !validateEmail(formInputValue)) {
             errorMessage += errorsMsgs.email.empty + "\r\n";
+            formInput.parentNode.insertAdjacentHTML(
+              "beforeend",
+              `<span class="page-callback__form-err">${errorsMsgs.email.empty}</span>`
+            );
             isValid = false;
           }
           break;
         case "checkbox":
           if (!formInput.checked) {
             errorMessage += errorsMsgs.privacy.empty + "\r\n";
+           
             isValid = false;
           }
           break;
@@ -141,19 +152,24 @@ $(document).ready(function () {
     const popupForm = document.querySelector(".page-callback__form");
 
     if (popupForm) {
+
+      const formInputs = popupForm.querySelectorAll("input");
+      formInputs.forEach(function (formInput) {
+        inputListener(formInput)
+      })
+
       const submitBtn = popupForm.querySelector('[type="submit"]');
       popupForm.addEventListener("submit", function (e) {
         e.preventDefault();
-      
 
         submitBtn.disabled = true;
 
         // так же можно прикрутить капчи, проверки на сессию
         const validResult = validForm(popupForm);
-        console.log(validResult);
+       
         if (validResult.isValid && validResult.errorMessage == "") {
           let formData = new FormData(popupForm);
-
+          submitBtn.disabled = false;
           // fetch("", {
           //   method: "POST",
           //   body: formData,
@@ -177,4 +193,26 @@ $(document).ready(function () {
   }
 
   callbackFormInit();
+
+  function inputListener(inputEl) {
+    
+    if (inputEl) {
+      inputEl.addEventListener("change", function () {
+        const inputParentEl = inputEl.parentNode;
+        const errEl = inputParentEl.querySelector(".page-callback__form-err");
+        if (errEl) {
+          errEl.remove();
+        }
+      });
+      inputEl.addEventListener("input", function () {
+        const inputParentEl = inputEl.parentNode;
+        const errEl = inputParentEl.querySelector(".page-callback__form-err");
+        if (errEl) {
+          errEl.remove();
+        }
+      });
+    }
+  }
+
+
 });
