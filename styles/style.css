@@ -958,9 +958,11 @@ button:focus {
 }
 .page-callback__form-privacy input[type="checkbox"] {
   opacity: 0;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   margin: 0;
+  margin-left: 8px;
+
   font-size: 0;
   line-height: 0;
 }

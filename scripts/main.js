@@ -170,6 +170,10 @@ $(document).ready(function () {
         if (validResult.isValid && validResult.errorMessage == "") {
           let formData = new FormData(popupForm);
           submitBtn.disabled = false;
+
+          for (var value of formData.values()) {
+            console.log(value);
+          }
           // fetch("", {
           //   method: "POST",
           //   body: formData,
